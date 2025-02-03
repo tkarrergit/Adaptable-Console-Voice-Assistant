@@ -1,0 +1,9 @@
+Fehler FAQ
+
+Tapo Funktionen
+
+	Autentifications Error
+		Die Anmeldedaten checken. Welche Person hat die Devices in seinem Handy angemeldet bzw. registriert. 
+		Entsprechend müssen die Anmeldedaten eingegeben werden.
+
+		Wenn die Devices neu verbunden werden müssen die IP Adressen gecheckt werden, da diese evt. neu vergeben wurden.

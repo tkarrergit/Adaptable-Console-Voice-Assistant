@@ -1,0 +1,33 @@
+Ask_Topic_espanol: En qué puedo servirte, Qué puedo hacer para ti
+Ask_Topic_Again_espanol: En qué puedo seguir sirviendo, Qué más puedo hacer para ti
+Ask_Topic_englisch: What can i do for you, How can i help you
+Ask_Topic_Again_englisch: What else can i do for you, How can i help you now
+Ask_Topic: Womit kann ich dienen?, Was kann ich für dich tun?,
+Ask_Topic_Again: Womit kann ich noch dienen?, Was kann ich noch für dich tun?,
+
+german_ok: Ja gerne, Mache ich, hört sich gut an, wird erledigt
+englisch_ok: ok, yes, your welcome, 
+spanisch_ok: si claro, directamente, hecho ahora,
+
+
+
+
+Übersetzen: Übersetzen mache ich gerne, ich kenne viele Sprachen kein Problem,
+Abbruch: Abbruch erkannt, machen wir schluss, reden wir beim nächsten mal weiter,
+FrageTALK1: Wie kann ich dir weiterhelfen oder worüber sollen wir sprechen?
+Frage TALK2: Was möchtest du mir sagen?, Wie kann ich dir helfen?,
+nachdenken: Lass mich nachdenken, da muss ich meinen Gripps anstrengen, da qualmt mir der Schädel warte bitte kurz,
+weiterreden: Möchtest du weiterreden?
+
+
+
+
+
+
+
+
+
+
+
+
+

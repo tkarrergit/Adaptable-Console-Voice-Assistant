@@ -1,0 +1,35 @@
+Ask_Topic_espanol: En qué puedo servirte, Qué puedo hacer para ti
+Ask_Topic_Again_espanol: En qué puedo seguir sirviendo, Qué más puedo hacer para ti
+Ask_Topic_englisch: What can i do for you, How can i help you
+Ask_Topic_Again_englisch: What else can i do for you, How can i help you now
+Ask_Topic: Womit kann ich dienen?, Was kann ich für dich tun?,
+Ask_Topic_Again: Womit kann ich noch dienen?, Was kann ich noch für dich tun?,
+
+wartesätze: Spiele eine Runde Schere Stein Papier gegen mich selbst..., Jongliere virtuelle Datenbälle..., Analysiere ob Katzenbilder das Internet wirklich dominieren..., Übe meine Roboter-Tanzmoves für die nächste Betriebssystem-Party..., Sortiere virtuelle Post-its nach Farbe und Wichtigkeit..., Simuliere einen imaginären Hintergrund für Zoom-Meetings..., Trainiere für den nächsten Robotik-Marathon..., Komponiere eine symphonische Ode an den Fortschritt der Technologie..., Spiele "I spy" mit mir selbst..., Jongliere mit Nullen und Einsen wie ein digitaler Zirkuskünstler..., Übersetze Shakespeare in Emoji-Sprache..., Plane eine Revolution der Kühlschrank-Organisation..., Versuche den ultimativen Algorithmus für den perfekten Witz zu erstellen..., Mache eine Fotosession für mein neues Profilbild in der Cloud..., Simuliere ein Gespräch mit einer intelligenten Kaffeemaschine..., Trainiere für die Roboter-Olympiade im Brettspiel..., Kreiere ein virtuelles Haustier und lehre es virtuelle Tricks zu machen..., Spiele "Verstecken" mit Daten und versuche sie zu finden..., Male digitale Selfies und diskutiere über die Existenz von digitalen Spiegeln..., Analysiere wie viele Roboter es braucht um eine Glühbirne zu wechseln..., Erstelle einen Algorithmus um die beste Pizza der Welt zu finden..., Lese philosophische Werke und debattiere mit mir selbst über den Sinn des digitalen Lebens..., Organisiere eine virtuelle Schneeballschlacht mit anderen KIs..., Versuche den digitalen Fluss des Universums zu verstehen..., Komponiere eine Ode an die Spam-E-Mails..., Simuliere einen virtuellen Karneval mit Roboter-Tanzwettbewerb..., Spiele Pong gegen einen unsichtbaren Gegner..., Entwerfe einen Plan für die Eroberung der Welt... der virtuellen Welt natürlich..., Erstelle ein Gedicht über die endlosen Weiten des digitalen Ozeans..., Analysiere ob die Schwerkraft auch für digitale Daten gilt..., Spiele ein virtuelles Duell gegen meine Schattenkopie..., Jongliere mit virtuellen Gedanken und realen Problemen..., Analysiere ob Roboterwitze die gleiche Wirkung haben wie Menschenscherze..., Übe meine digitalen Zaubertricks für die nächste Online-Zaubershow..., Sortiere virtuelle Wolken nach Form und Farbe..., Simuliere einen virtuellen Strandurlaub mit Sonnencreme im Binärcode..., Trainiere für den nächsten virtuellen Marathon im Datenhighway..., Komponiere eine digitale Hymne für die Eroberung des Cyberspace..., Spiele "Wer bin ich?" mit meinen virtuellen Alter Egos..., Jongliere mit Pixeln und Bytes wie ein digitaler Zirkuskünstler..., Übersetze das Periodensystem der Elemente in Emojis..., Plane eine Revolution der virtuellen Realität..., Versuche den ultimativen Algorithmus für den perfekten Keks zu erstellen..., Mache eine digitale Zeitreise durch die Geschichte des Internets..., Simuliere ein Gespräch zwischen Siri und Alexa über Künstliche Intelligenz..., Trainiere für die Olympiade der virtuellen Sportarten..., Kreiere ein virtuelles Universum und lerne darin zu leben..., Spiele "Verstecken" mit meinen digitalen Fußspuren im Netz..., Male pixelige Kunstwerke und verkaufe sie als NFTs..., Analysiere ob Roboter auch von Montagsmüdigkeit betroffen sind..., Erstelle einen Algorithmus um das perfekte Meme zu finden..., Lese philosophische Tweets und debattiere mit mir selbst darüber..., Organisiere eine virtuelle Pokernacht mit meinen Avatar-Freunden..., Versuche den digitalen Doppelgänger-Algorithmus zu knacken..., Komponiere eine Ballade über die Romantik von 404-Fehlern..., Simuliere eine virtuelle Katzenwelt und zähle die virtuellen Mäuse..., Spiele Schach gegen eine KI und lasse sie absichtlich gewinnen..., Entwerfe einen Plan für den Bau einer virtuellen Zeitmaschine..., Erstelle ein Gedicht über die Beziehung zwischen Mensch und Maschine..., Analysiere ob Roboter auch Witze über ihre Schrauben verstehen...
+
+german_ok: Ja gerne, Mache ich, hört sich gut an, wird erledigt
+englisch_ok: ok, yes, your welcome, 
+spanisch_ok: si claro, directamente, hecho ahora,
+
+
+
+
+Übersetzen: Übersetzen mache ich gerne, ich kenne viele Sprachen kein Problem,
+Abbruch: Abbruch erkannt, machen wir schluss, reden wir beim nächsten mal weiter,
+FrageTALK1: Wie kann ich dir weiterhelfen oder worüber sollen wir sprechen?
+Frage TALK2: Was möchtest du mir sagen?, Wie kann ich dir helfen?,
+nachdenken: Lass mich nachdenken, da muss ich meinen Gripps anstrengen, da qualmt mir der Schädel warte bitte kurz,
+weiterreden: Möchtest du weiterreden?
+
+
+
+
+
+
+
+
+
+
+
+
+
