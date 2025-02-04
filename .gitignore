@@ -1,11 +1,12 @@
-Meine Config/
-output/
-output1/
-Scripts/
-Lib/
-Include/
+Meine_Config/
+/output/
+/output1/
+/Scripts/
+/Lib/
+/Include/
 pyvenv.py
-
+/share/
+/cookies_snapshot/
 
 __pycache__/
 .idea/
