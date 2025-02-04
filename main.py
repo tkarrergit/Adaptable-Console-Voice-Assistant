@@ -609,6 +609,7 @@ def chat_dialog(engine):#, App_instance):
                                     
                 current_state = states['BENUTZER']
 
+
                 
             if current_state == states['BENUTZER']: 
                 if debug_mode == True: print("Ankunft BENUTZER")
