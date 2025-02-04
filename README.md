@@ -47,7 +47,7 @@ Dieses Projekt war mein Einstieg in Python und wurde von mir entwickelt, da ich 
 - Darüber hinaus kam jedoch auch der Wunsch nach einer Datenbanklösung zur dynamischen Verwaltung und Erstellung von Funktionen auf.
 - Durch die Nutzung von PyAutoGUI habe ich erste Erfahrungen in der Automatisierung von Anwendungen gesammelt.
 - Die hohe Geschwindigkeit und Stabilität der offline Spracherkennung mit Vosk hat mich beeindruckt und mir gezeigt, dass Offline-Lösungen oft Datenschutz- und Geschwindigkeitsvorteile bieten.
-- LLMs haben sich als wertvolle Informationsquelle erwiesen. Gleichzeitig habe ich festgestellt, dass ihre Grenzen schnelle eigene Entwicklungsarbeit notwendig machen.
+- LLMs haben sich als wertvolle Informationsquelle erwiesen. Gleichzeitig habe ich festgestellt, dass ihre Grenzen recht schnell erreicht sind und eigene Entwicklungsarbeit notwendig machen.
 
 
 ---
