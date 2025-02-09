@@ -5,12 +5,17 @@ Early Development / Beta Features
 
 **Entwicklungszeitraum:** 
 		November, 2023 bis März, 2024
-
+  
+⚠️ **Achtung:** Bei der Nutzung von Hugging Chat kann es gerade zu folgenden serverseitigen Störungen kommen:
+- Fehler "Model overloaded"
+- Langsame Antworten durch volle Server
+- Chat bricht manchmal ab
+  
 **Technologien**:
 - **Python**: Hauptprogrammiersprache für die flexible und leistungsstarke Implementierung.
 - **PyAutoGUI**: Automatisierung von Benutzerinteraktionen und App-Steuerung.
 - **PyP100**: Steuerung und Automatisierung von Tapo-Lampen und Smart-Geräten.
-- **HuggingChat**: Integration moderner Sprachmodelle über die Soulter-API.
+- **HugChat**: Integration moderner Sprachmodelle über die Soulter-API.
 - **Vosk**: Offline-Spracherkennung für schnelle und datenschutzfreundliche Sprachverarbeitung.
 - **pyttsx3**: Offline-Sprachausgabe für ressourcenschonende Wiedergabe.
 
