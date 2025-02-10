@@ -1,9 +1,6 @@
 from PyP100 import PyP100
 from PyP100 import PyL530
 import time
-import configparser
-import math
-
 
 s_ip_1 = "192.168.68.115"
 s_ip_2 = "192.168.68.148"
@@ -466,4 +463,4 @@ def licht_show(device):
 
 
 if __name__ == "__main__":
-    anschalten(strahler_1)
+    pass

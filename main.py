@@ -1,6 +1,4 @@
-import schriftzug
 import funktions
-import Tapo
 import threading
 from PyP100 import PyP100
 from PyP100 import PyL530
@@ -9,11 +7,8 @@ from variables_for_all import debug_mode
 from variables_for_all import pyttsx_voice_id           
 import random
 import time
-import pyautogui
 import show_functions
-#Lichtfunktion
-from PyP100 import PyP100
-from PyP100 import PyL530
+
 global lamp_1, lamp_2
 
 brightness = 50
@@ -352,8 +347,50 @@ def print_functions(functions, debug_mode,):
             break
         else:
             continue
-    
 
+def input_choice_speech_or_text():
+    input_choice_flag = True
+    while input_choice_flag:
+        funktions.text_to_speech(engine, pyttsx_voice_id, "Wählen sie Text oder Sprache für ihre Eingabe")
+        choice = input("Wählen sie Text oder Sprache für ihre Eingabe:")
+        input_choice = str(choice.lower())
+        if input_choice == "text":
+            input_choice_flag = False             
+            return input_choice
+            
+        elif input_choice == "sprache":
+            input_choice_flag = False
+            return input_choice
+           
+        else:
+            print(f"{input_choice} ist keine gültige Wahl.")
+         
+
+
+def get_user_input_speech_or_text(engine, vosk_recognizer, pyttsx_voice_id, current_ask_topic_sentence, input_choice):
+    
+    
+    try:
+        # Spracheingabe verwenden
+        if input_choice == "sprache":
+            while True:
+                print("Spracheingabe wird erwartet...")
+                result = funktions.get_user_input(vosk_recognizer)
+                if result:
+                    return result                
+    except Exception as e:
+        print(f"Fehler bei der Spracheingabe: {e}")
+    try:
+        if input_choice == "text":
+            #Texteingabe
+            user_input = input("Was kann ich für dich tun? ")
+            return user_input
+        else:
+            #Texteingabe
+            user_input = input("Was kann ich für dich tun? ")
+            return user_input
+    except Exception as e:
+        print(f"Fehler bei der Texteingabe: {e}")
 
 states = {
     'BENUTZER': 0,
@@ -390,7 +427,7 @@ random_satz_11 = funktions.get_random_sentence_from_file(funktions.file_path_sat
 
 
 def chat_dialog(engine):#, App_instance):
-    global current_state, previous_state, chatbot, Signal_word_found, vosk_recognizer, pyttsx_voice_id, change_user, stop_flag
+    global current_state, previous_state, chatbot, Signal_word_found, vosk_recognizer, pyttsx_voice_id, change_user, input_choice
 
     funktions.konsolengroesse(180, 25)
        
@@ -402,6 +439,7 @@ def chat_dialog(engine):#, App_instance):
     pyttsx_voice_id = 2
     change_user_flag = False
     settings_flag = False
+    input_choice = ""
 
 
 
@@ -416,9 +454,9 @@ def chat_dialog(engine):#, App_instance):
                 config.read(funktions.resource_path("config/standarduser_config.ini"))
                 
                 #Lesen der einzelnen Werte aus der ini Datei
-                standarduser = config.get(new_section_name, "Benutzer")
-                sprache = config.get(new_section_name, "Sprache")
-                appnutzung = config.getboolean(new_section_name, "Appnutzung")
+                standarduser = config.get(new_section_name, "benutzer")
+                sprache = config.get(new_section_name, "sprache")
+                appnutzung = config.getboolean(new_section_name, "appnutzung")
                 schnellstart = config.getboolean(new_section_name, "schnellstart")
                 
                 if debug_mode == True: print("standarduser: " +standarduser + " sprache: " + sprache + " appnutzung: " + str(appnutzung) + " schnellstart: " + str(schnellstart))
@@ -447,18 +485,15 @@ def chat_dialog(engine):#, App_instance):
 
                                    
                     #Input ASK_LANG
-                    if conn != None:
-                        funktions.text_to_speech(engine, pyttsx_voice_id, "Do you prefer German, English or Spanish for your Session?")
-                        user_input = server_input(conn)
-                    else:
-                        user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Do you prefer German, English or Spanish for your Session?")                          
+                    
+                    user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Do you prefer German, English or Spanish for your Session?")                          
                         
                 if debug_mode == True or debug_mode == "app":
                     user_input = "deutsch"
                 
                 #Die Sprache wird in die Standartuser_config.ini geschrieben
                 config.set(new_section_name, "Sprache", user_input)                
-                with open("config/standarduser_config.ini", "w") as configfile:
+                with open(funktions.resource_path("config/standarduser_config.ini"), "w") as configfile:
                     config.write(configfile)
 
                 if schnellstart == False:
@@ -535,7 +570,6 @@ def chat_dialog(engine):#, App_instance):
             if current_state == states['ASK_APP']:
                 if debug_mode == True: 
                     print("Ankunft ASK_APP")
-                    conn = None
                 
                 user_input = ""
                                     
@@ -580,7 +614,7 @@ def chat_dialog(engine):#, App_instance):
 
                         funktions.text_to_speech(engine, pyttsx_voice_id,"Die Appnutzung ist als Standarteinstellung deaktiviert")
                         appnutzung = False
-                        conn = None
+                        
                         current_state = states['BENUTZER']
                 
                 if debug_mode == "app" or appnutzung == True:                   
@@ -593,12 +627,12 @@ def chat_dialog(engine):#, App_instance):
                         funktions.text_to_speech(engine, pyttsx_voice_id, "Please start the App")  
                     if pyttsx_voice_id == 4:
                         funktions.text_to_speech(engine, pyttsx_voice_id, "Por favor empieza el aplication")        
-                    conn = server.server_program() 
+                    
                     current_state = states['BENUTZER']
                 
                 
                 if appnutzung == False:
-                    conn = None
+                    
                     if schnellstart == False:
                         if pyttsx_voice_id == 0:
                             funktions.text_to_speech(engine, pyttsx_voice_id, "Standart Einstellung keine App Nutzung ")
@@ -608,7 +642,6 @@ def chat_dialog(engine):#, App_instance):
                             funktions.text_to_speech(engine, pyttsx_voice_id, "Configuración por defecto sin uso de la aplicación")
                                     
                 current_state = states['BENUTZER']
-
 
                 
             if current_state == states['BENUTZER']: 
@@ -620,30 +653,18 @@ def chat_dialog(engine):#, App_instance):
                     funktions.print_center_zeile("*******************************************************", 3, "center") 
 
                     #Input BENUTZER
-                    if pyttsx_voice_id == 0:
-                        if conn != None:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, "Wie ist dein Benutzer Name?")
-                            user_input = server_input(conn)
-                        else:
-                            user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Wie ist dein Benutzer Name?")
+                    if pyttsx_voice_id == 0:                        
+                        user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Wie ist dein Benutzer Name?")
                     elif pyttsx_voice_id == 2:
-                        if conn != None:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, "Whats your Username?")
-                            user_input = server_input(conn)
-                        else:
-                            user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Whats your Username?")
-                    elif pyttsx_voice_id == 4:
-                        if conn != None:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, "Cuál es tu nombre de usuario?")
-                            user_input = server_input(conn)
-                        else:
-                            user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Cuál es tu nombre de usuario?")         
+                        user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Whats your Username?")
+                    elif pyttsx_voice_id == 4:                        
+                        user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, "Cuál es tu nombre de usuario?")         
                     benutzername_erfragt = user_input  
 
                     config.set(new_section_name, "Benutzer", benutzername_erfragt)
 
                     # Schreiben Sie die Konfiguration in eine Datei
-                    with open("config/standarduser_config.ini", "w") as configfile:
+                    with open(funktions.resource_path("config/standarduser_config.ini"), "w") as configfile:
                         config.write(configfile)                     
 
                     funktions.text_to_speech(engine, pyttsx_voice_id,"Der Standartbenutzer ist ab jetzt" + benutzername_erfragt)
@@ -652,11 +673,11 @@ def chat_dialog(engine):#, App_instance):
                 if standarduser and change_user_flag == False:
                     benutzername_erfragt = standarduser
                     
-                    
+                """
                 if debug_mode == True or debug_mode == "app":
                     print("benutzername_erfragt")          
-                    benutzername_erfragt = "thomas"
-                    print(benutzername_erfragt)
+                    benutzername_erfragt = "max"
+                    print(benutzername_erfragt)"""
                             
                 # Lese die INI-Datei            
                 config.read(funktions.resource_path('config/benutzer_settings_config.ini'))
@@ -941,29 +962,30 @@ def chat_dialog(engine):#, App_instance):
                 #print_functions_thread = threading.Thread(target=print_functions, args=(functions, debug_mode,)
                 #print_functions_thread.start()
                 
-                if debug_mode == False:
-                    #funktions.call_print_function_thread(debug_mode)
-                    if pyttsx_voice_id == 0:
-                        #schriftzug.call_schriftzug_thread()
-                        funktions.print_center_zeile("Willkommen zum Adaptable Console Voice Assistant", 2, "center")
-                        funktions.print_center_zeile("***************************************************", 3, "center")  
-                        funktions.text_to_speech(engine, pyttsx_voice_id, "Willkommen zum Anpassbaren Konsolen Sprachassistenten. Lass uns starten!")
-                        time.sleep(0.2)
-                        #pyautogui.press("q")
+                
+                #funktions.call_print_function_thread(debug_mode)
+                if pyttsx_voice_id == 0:
+                    #schriftzug.call_schriftzug_thread()
+                    funktions.print_center_zeile("Willkommen zum Adaptable Console Voice Assistant", 2, "center")
+                    funktions.print_center_zeile("***************************************************", 3, "center")  
+                    funktions.text_to_speech(engine, pyttsx_voice_id, "Willkommen zum Anpassbaren Konsolen Sprachassistenten. Lass uns starten!")
+                    input_choice = input_choice_speech_or_text()
+                    time.sleep(0.2)
+                    #pyautogui.press("q")
 
-                    if pyttsx_voice_id == 2:
-                        funktions.print_center_zeile("me to the Adaptable Console Voice Assistant", 2, "center")
-                        funktions.print_center_zeile("***************************************************", 3, "center")  
-                        funktions.text_to_speech(engine, pyttsx_voice_id, "Welcome, to the Adaptable Console Voice Assistant. Son we will start!")#Your creative artist for the ultimate digital lifestyle! With a single voice command, ignite a fireworks display of features from personalized app interactions, to individual stories and soothing sounds. Experience the freedom of customization and the security, of offline speech recognition. Let's get started!")           
+                if pyttsx_voice_id == 2:
+                    funktions.print_center_zeile("me to the Adaptable Console Voice Assistant", 2, "center")
+                    funktions.print_center_zeile("***************************************************", 3, "center")  
+                    funktions.text_to_speech(engine, pyttsx_voice_id, "Welcome, to the Adaptable Console Voice Assistant. Son we will start!")#Your creative artist for the ultimate digital lifestyle! With a single voice command, ignite a fireworks display of features from personalized app interactions, to individual stories and soothing sounds. Experience the freedom of customization and the security, of offline speech recognition. Let's get started!")           
+                        
+                if pyttsx_voice_id == 4:
+                    funktions.print_center_zeile("Bienvenidos a Adaptable Console Voice Assistant", 2, "center")
+                    funktions.print_center_zeile("***************************************************", 3, "center")  
+                    funktions.text_to_speech(engine, pyttsx_voice_id, "Bienvenidos a Adaptable Console Voice Assistant. Un momento, y Vamonos!")
+                                        
                             
-                    if pyttsx_voice_id == 4:
-                        funktions.print_center_zeile("Bienvenidos a Adaptable Console Voice Assistant", 2, "center")
-                        funktions.print_center_zeile("***************************************************", 3, "center")  
-                        funktions.text_to_speech(engine, pyttsx_voice_id, "Bienvenidos a Adaptable Console Voice Assistant. Un momento, y Vamonos!")
-                                         
-                              
-                    #schriftzug.stop_schriftzug_thread()
-                    #funktions.stop_print_function_thread() 
+                #schriftzug.stop_schriftzug_thread()
+                #funktions.stop_print_function_thread() 
 
                 if debug_mode == True:
                     current_state = states['ASK_TOPIC']
@@ -986,10 +1008,8 @@ def chat_dialog(engine):#, App_instance):
                     #if funktions.print_functions_thread.is_alive():
                         #print_flag = True
                     #elif print_flag == False:
-                    #funktions.call_print_function_thread(debug_mode)
-                    funktions.print_center_zeile("Choose one of your own created creative functions and have fun!", 2, "center")               
-                    funktions.print_center_zeile("****************************************************************", 3, "center")
-                    
+                    #funktions.call_print_function_thread(debug_mode)                    
+                  
                 if pyttsx_voice_id == 0:
                     if debug_mode == True:print("Deutsche Dateien geladen")
                     additional_config_paths = [
@@ -1043,16 +1063,12 @@ def chat_dialog(engine):#, App_instance):
                 current_ask_topic_sentence = random_satz_2 
                 
                 #Input ASK_TOPIC
-                if debug_mode == True:
-                    conn = None
-                if conn != None:                    
-                    user_input = server_input(conn)
-                    print("Anfrage von App" + user_input)
-                else:
-                    #########################################################################################################################
-                    #user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, {current_ask_topic_sentence})
-                    ##########################################################################################################################
-                    user_input = input("Was kann ich für dich tun?")
+                                
+                user_input = get_user_input_speech_or_text(engine, vosk_recognizer, pyttsx_voice_id, current_ask_topic_sentence, input_choice)
+                #########################################################################################################################
+                #user_input = funktions.text_to_speech_and_listen(engine, vosk_recognizer, pyttsx_voice_id, {current_ask_topic_sentence})
+                ##########################################################################################################################
+                #user_input = input("Was kann ich für dich tun?")
                 #Standarteinstellungen ändern
                 if "einstellungen" in user_input.lower() or "settings" in user_input.lower() or "configuración" in user_input.lower():
                     settings_flag = True
@@ -1225,7 +1241,7 @@ def chat_dialog(engine):#, App_instance):
                       pass
                  
                     #Change User or Language
-                    if debug_mode == True: print("chat_dialog Unterfunktion chanhge User language: ")  
+                    if debug_mode == True: print("chat_dialog Unterfunktion change User language: ")  
                     contains_change_user_or_language = funktions.contains_change_user_or_language(user_input, change_language, change_user, section_name)                    
                     if debug_mode == True: print("Chat_Dialog: contains_change_user_or_language: " + str(contains_change_user_or_language))
                     if contains_change_user_or_language != False: 
@@ -1271,7 +1287,8 @@ def chat_dialog(engine):#, App_instance):
                       
                         if debug_mode == False:funktions.clear_voice_assistent()
                         Signal_word_found = True
-                        funktions.ultimate_combination(lamp_plug_dict, user_combination_input_1, user_combination_input_2, user_combination_input_3, user_combination_input_4, user_combination_input_5, user_combination_input_6, 
+
+                        funktions.ultimate_combination(chatbot, lamp_plug_dict, user_combination_input_1, user_combination_input_2, user_combination_input_3, user_combination_input_4, user_combination_input_5, user_combination_input_6, 
                                             user_combination_input_7, user_combination_input_8, user_combination_input_9, user_combination_input_10, signal_words, and_signal_words, section_name, dialog_chat_enabled, 
                                             app_signal_words, app_and_signal_words, app_section_name, app, mouse_click_on_coordinates_1, mouse_click_on_coordinates_2, mouse_click_on_coordinates_3, 
                                                mouse_click_on_coordinates_4, mouse_click_on_coordinates_5, mouse_click_on_coordinates_6, 
@@ -1300,31 +1317,20 @@ def chat_dialog(engine):#, App_instance):
                         ok_satz = funktions.unterschied_sprache_ein_random_satz(random_satz_9, random_satz_10, random_satz_11, pyttsx_voice_id)
 
                         #Output
-                        if conn != None:
-                            if debug_mode == True:
-                                print("Output Server")
-                            server.server_output(conn, ok_satz)
-                        else:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
+                        
+                        funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
                                                
                         #if debug_mode == False:funktions.clear_voice_assistent()
                         Signal_word_found = True
                         if dialog_chat_enabled:
-                            if conn != None:
-                                if debug_mode == True:
-                                    print("Output Server")
-                                server.server_output(conn, "dialogmodus")
                             if debug_mode ==False:
                                 funktions.print_center_zeile("Dialogmodus wird gestartet. Einen kleinen Augenblick bitte.", 1, "left")
 
                             if active_chat_engine=="huggingface":
                                 try:                                    
                                     funktions.huggingface_newchat(chatbot)
-                                except:
-                                    if conn != None:
-                                        server.server_output(conn, "Verbindungs- oder Serverprobleme bitte versuch es später nochmal ")
-                                    else:
-                                        funktions.text_to_speech(engine, pyttsx_voice_id, "Verbindungs- oder Serverprobleme bitte versuch es später nochmal ")
+                                except:                                    
+                                    funktions.text_to_speech(engine, pyttsx_voice_id, "Verbindungs- oder Serverprobleme bitte versuch es später nochmal ")
 
                             while True:
                                 if debug_mode == True: 
@@ -1334,17 +1340,15 @@ def chat_dialog(engine):#, App_instance):
                                 if debug_mode == True: 
                                     print("Dialogmodus")
                                
-                                funktions.process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id, conn, section_name)
+                                funktions.process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id, section_name)
                                 
                                 if debug_mode == True: print("process_user_input fertiggestellt")
                                 if debug_mode == True: print("Erster user_input_i: " + user_input_i)
 
                                
                                 #Input Dialogmodus
-                                if conn != None:
-                                    user_input_i = server_input(conn)
-                                else:
-                                    user_input_i = funktions.get_user_input(vosk_recognizer)
+                               
+                                user_input_i = funktions.get_user_input(vosk_recognizer)
 
                                 if debug_mode == True: print("Folgender user_input_i: " + user_input_i)
                                 if "qq" in user_input_i.lower() or "stopp" in user_input_i.lower() or "es reicht" in user_input_i.lower() or "stop" in user_input_i.lower() or "parar" in user_input_i.lower():
@@ -1362,7 +1366,7 @@ def chat_dialog(engine):#, App_instance):
                                     previous_state = states['ASK_TOPIC']
                                     break
                         else:                                                                                
-                            funktions.process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id, conn, section_name)
+                            funktions.process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id, section_name)
                             current_ask_topic_sentence = random_satz_2 if current_ask_topic_sentence == random_satz_1 else random_satz_1
                             previous_state = states['ASK_TOPIC']
                             break
@@ -1376,12 +1380,8 @@ def chat_dialog(engine):#, App_instance):
                         random_satz_11 = funktions.get_random_sentence_from_file(funktions.file_path_satz, marker_satz_11)
                         ok_satz = funktions.unterschied_sprache_ein_random_satz(random_satz_9, random_satz_10, random_satz_11, pyttsx_voice_id)
 
-                        if conn != None:
-                            if debug_mode == True:
-                                print("Output Server")
-                            server.server_output(conn, ok_satz)
-                        else:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
+                        
+                        funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
 
                         Signal_word_found = True
                         if debug_mode == True: print("App Funktion")
@@ -1415,12 +1415,8 @@ def chat_dialog(engine):#, App_instance):
                         random_satz_11 = funktions.get_random_sentence_from_file(funktions.file_path_satz, marker_satz_11)
                         ok_satz = funktions.unterschied_sprache_ein_random_satz(random_satz_9, random_satz_10, random_satz_11, pyttsx_voice_id)
 
-                        if conn != None:
-                            if debug_mode == True:
-                                print("Output Server")
-                            server.server_output(conn, ok_satz)
-                        else:
-                            funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
+                        
+                        funktions.text_to_speech(engine, pyttsx_voice_id, ok_satz)
 
                         Signal_word_found = True
                         
@@ -1435,48 +1431,43 @@ def chat_dialog(engine):#, App_instance):
                         current_ask_topic_sentence = random_satz_2 if current_ask_topic_sentence == random_satz_1 else random_satz_1
                         previous_state = states['ASK_TOPIC']  
                                           
-                        if debug_mode == True: 
-                            if i == 15: 
-                                
-                                server.server_output(conn, "Keine Signalwörter gefunden. Bitte versuch es nochmal.")
+                        if debug_mode == True:                         
                             print("No matching signal words found.")
                             
             else:
                 if debug_mode == True:
-                    if i == 15: 
-                        print("i=16 ")
-                        server.server_output(conn, "Keine Signalwörter gefunden. Bitte versuch es nochmal.")
                     print("error No matching signal words found.")
                     
 
         except Exception as e:
-            if debug_mode == True: print("chat_dialog" + f"Error: {e}")
+            if debug_mode == False: print("chat_dialog" + f"Error: {e}")
             time.sleep(0.5)
             #funktions.text_to_speech(engine, pyttsx_voice_id, "unbekannte Wörter oder Problem. Bitte überleg mal woran es liegen könnte.")
             current_state = states['ASK_TOPIC']
             previous_state = states['ASK_TOPIC']  # Reset previous_state in case of an error
 
-def server_input(conn):        
-    server_input = server.get_server_input(conn)  
-    #server.conn_close(conn)
-    print(server_input)
-    return server_input
 
 # Voice Assistent Logik und Funktionsimplementierungen Ende
 if __name__ == "__main__": 
-    import server
     from vosk import Model, KaldiRecognizer
     import pyttsx3
+    import debugpy
+
+    if debug_mode == True:
+        debugpy.listen(("localhost", 5678))
+        print("Warte auf Debugger-Verbindung...")
+        debugpy.wait_for_client()  # Hier pausiert das Programm und wartet auf den Debugger
+        print("Debugger verbunden!")
+
     engine = pyttsx3.init()   
-    pyttsx_voice_id = 0 
-    if debug_mode == False: funktions.clear_voice_assistent()
+    pyttsx_voice_id = 0
     
     # Initialize Huggingface chatbot
-    chatbot = funktions.initialize_huggingface()
     try:
-        funktions.huggingface_newchat(chatbot)
+        chatbot = funktions.initialize_huggingface()
     except Exception as e:
-            if debug_mode == True: print("Huggingface: " + f"Error: {e}")   
+            if debug_mode == True: print("Huggingface: " + f"Error: {e}") 
+
     if debug_mode == False: funktions.clear_voice_assistent()
     
     chat_dialog_thread = threading.Thread(target=chat_dialog(engine))#, daemon=True, args=(engine, app)

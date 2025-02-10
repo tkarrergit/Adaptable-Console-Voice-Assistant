@@ -1,18 +1,13 @@
 import configparser #Sorgt dafür das die Config.ini Dateien gelesen werden können
-global chatbot
 from vosk import Model, KaldiRecognizer
 import sys
-import Tapo
-import tapo_new
 import threading
-#sys.path.append(r'Lib\site-packages')
 import os
 from variables_for_all import debug_mode
 from variables_for_all import pyttsx_voice_id
-
 import show_functions
-import server
 
+global chatbot
 
 def konsolengroesse(width, height):
     # Fensterbreite und -höhe in Zeichen
@@ -448,7 +443,7 @@ def initialize_huggingface():
     
     try:
         # Einloggen bei Huggingface und Autorisieren von HugChat
-        sign = Login("huggchat@proton.de", "Huggchat55%")
+        sign = Login("huggchat@proton.me", "Huggchat55%")
         cookies = sign.login()
         if debug_mode == True: print(cookies)
         # Cookies im lokalen Verzeichnis speichern
@@ -456,8 +451,8 @@ def initialize_huggingface():
         sign.saveCookiesToDir(cookie_path_dir)
         # Neue HugChat-Verbindung starten
         chatbot = ChatBot(cookies=cookies)
-
         return chatbot
+    
     except Exception as e:
         if debug_mode == True: print(f"Fehler bei der Initialisierung von Huggingface: {e}")
         return None
@@ -501,7 +496,7 @@ def hugchat(user_input):
 
 
 
-def huggingfacechat(engine, user_input, chatbot, pyttsx_voice_id, conn, section_name):
+def huggingfacechat(engine, user_input, chatbot, pyttsx_voice_id, section_name):
     clear_console()
     #stop_print_function_thread()
     call_waiting_jokes_thread(debug_mode)   
@@ -515,40 +510,28 @@ def huggingfacechat(engine, user_input, chatbot, pyttsx_voice_id, conn, section_
         ask_for_translation(lang, antwort)
         antwort = translation
                
-        if conn != None:
-            if debug_mode == True:
-                print("Output Server")
-                print(antwort)
-            server.server_output(conn, antwort + " " + section_name)
-        else: 
-            stop_waiting_jokes_thread()
-            clear_console()
-            print(antwort)
-            text_to_speech(engine, pyttsx_voice_id, antwort)
+        
+        clear_console()
+        stop_waiting_jokes_thread()
+        clear_console()
+        print(antwort)
+        text_to_speech(engine, pyttsx_voice_id, antwort)
 
     elif pyttsx_voice_id == 2:
         
-        if conn != None:
-            if debug_mode == True:
-                print("Output Server")
-            server.server_output(conn, antwort)
-        else: 
-            stop_waiting_jokes_thread()
-            clear_console()
-            print(antwort)
-            text_to_speech(engine, pyttsx_voice_id, antwort)
+         
+        stop_waiting_jokes_thread()
+        clear_console()
+        print(antwort)
+        text_to_speech(engine, pyttsx_voice_id, antwort)
 
     elif pyttsx_voice_id == 4:
         
-        if conn != None:
-            if debug_mode == True:
-                print("Output Server")
-            server.server_output(conn, antwort)
-        else:
-            stop_waiting_jokes_thread() 
-            clear_console()
-            print(antwort)
-            text_to_speech(engine, pyttsx_voice_id, antwort)
+        
+        stop_waiting_jokes_thread() 
+        clear_console()
+        print(antwort)
+        text_to_speech(engine, pyttsx_voice_id, antwort)
     
     if antwort == "Ich konnte keine Antwort von HugChat erhalten.":
         stop_waiting_jokes_thread()
@@ -636,7 +619,7 @@ async def ask_bingchatbot(user_input: str) -> str:
         if bot is not None:
             await bot.close()
 
-def copilot(engine, conn, user_input: str, section_name) -> None:
+def copilot(engine, user_input: str, section_name) -> None:
     clear_console()
     #stop_print_function_thread()
     call_waiting_jokes_thread(debug_mode)
@@ -655,18 +638,12 @@ def copilot(engine, conn, user_input: str, section_name) -> None:
 
     if debug_mode == True: print("\nQuellenangabe:")
     print(sources_text)
-    #print_sentences(sources_text)
-    if conn != None:
-        if debug_mode == True:
-            print("Output Server")
+    #print_sentences(sources_text)   
         
-        server.server_output(conn, text_result + " " + section_name)
-    else: 
-        
-        text_to_speech(engine, pyttsx_voice_id, text_result)
+    text_to_speech(engine, pyttsx_voice_id, text_result)
 
 
-def bingchat(engine, conn, user_input: str, section_name) -> None:
+def bingchat(engine, user_input: str, section_name) -> None:
     clear_console()
     #stop_print_function_thread()
     call_waiting_jokes_thread(debug_mode)
@@ -688,14 +665,8 @@ def bingchat(engine, conn, user_input: str, section_name) -> None:
     if debug_mode == True: print("\nQuellenangabe:")
     print(sources_text)
     #print_sentences(sources_text)
-    if conn != None:
-        if debug_mode == True:
-            print("Output Server")
-        
-        server.server_output(conn, text_result + " " + section_name)
-    else: 
-        
-        text_to_speech(engine, pyttsx_voice_id, text_result)
+    
+    text_to_speech(engine, pyttsx_voice_id, text_result)
 
 
 # Bingchat Ende
@@ -703,7 +674,7 @@ def bingchat(engine, conn, user_input: str, section_name) -> None:
 # Perplexity Anfang
 from perplexity import Perplexity
 
-def perplexity_new(engine, user_input, conn, section_name):
+def perplexity_new(engine, user_input, section_name):
     clear_console()
     #stop_print_function_thread()
     call_waiting_jokes_thread(debug_mode)
@@ -737,14 +708,9 @@ def perplexity_new(engine, user_input, conn, section_name):
         stop_waiting_jokes_thread()
         clear_console()
         print(formatted_answer)
-        if conn != None:
-            if debug_mode == True:
-                print("Output Server")
+        
             
-            server.server_output(conn, formatted_answer + " " + section_name)
-        else:
-            
-            text_to_speech(engine, pyttsx_voice_id, formatted_answer)
+        text_to_speech(engine, pyttsx_voice_id, formatted_answer)
     else:
         print("No valid results found")
     
@@ -1099,19 +1065,19 @@ def text_to_speech(engine, pyttsx_voice_id, text):
 active_chat_engine = "huggingface"
 
 #Die Funktion process_user_input() weißt den Input aus den Funktionen von chat_dialog() den GPT zu und gibt die Ergebnisse aus.def process_user_input(engine, active_chat_engine, user_input, chatbot):
-def process_user_input(engine, active_chat_engine, user_input, chatbot, pyttsx_voice_id, conn, section_name):
+def process_user_input(engine, active_chat_engine, user_input, chatbot, pyttsx_voice_id, section_name):
     if debug_mode == True: print("Active Chat Engine:", active_chat_engine)
     if debug_mode == True: print("User Input:", user_input)
     
     if active_chat_engine.lower() == 'huggingface':
-        huggingfacechat(engine, user_input, chatbot, pyttsx_voice_id, conn, section_name)
+        huggingfacechat(engine, user_input, chatbot, pyttsx_voice_id, section_name)
         if debug_mode == True: print("higgingfacechat fertig")
     elif active_chat_engine.lower() == 'bing':
-        bingchat(engine, conn , user_input, section_name)
+        bingchat(engine, user_input, section_name)
     elif active_chat_engine.lower() == 'perplexity':
-        perplexity_new(engine, user_input, conn, section_name)
+        perplexity_new(engine, user_input, section_name)
     elif active_chat_engine.lower() == 'copilot':
-        copilot(engine, conn, user_input, section_name)
+        copilot(engine, user_input, section_name)
         
 
     else:
@@ -1211,7 +1177,7 @@ def ultimate_light (tapo_section_name, anschalten_lamp_color, anschalten_lamp_te
 #Beleuchtung Ende
 #Combinations Anfang
 
-def ultimate_combination(lamp_plug_dict, user_combination_input_1, user_combination_input_2, user_combination_input_3, user_combination_input_4, user_combination_input_5, user_combination_input_6, 
+def ultimate_combination(chatbot, lamp_plug_dict, user_combination_input_1, user_combination_input_2, user_combination_input_3, user_combination_input_4, user_combination_input_5, user_combination_input_6, 
                                             user_combination_input_7, user_combination_input_8, user_combination_input_9, user_combination_input_10, signal_words, and_signal_words, section_name, dialog_chat_enabled, 
                                             app_signal_words, app_and_signal_words, app_section_name, app, mouse_click_on_coordinates_1, mouse_click_on_coordinates_2, mouse_click_on_coordinates_3, 
                                                mouse_click_on_coordinates_4, mouse_click_on_coordinates_5, mouse_click_on_coordinates_6, 
@@ -1694,7 +1660,7 @@ def ultimate_combination(lamp_plug_dict, user_combination_input_1, user_combinat
                                     if debug_mode == False:clear_voice_assistent()                              
                                     break
                         else:                                                                                
-                            process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id)
+                            process_user_input(engine, active_chat_engine, user_input_i, chatbot, pyttsx_voice_id, section_name)
                             break
 
                     elif app_contains_signal_word(user_input, app_signal_words, app_and_signal_words, app_section_name):

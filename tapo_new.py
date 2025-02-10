@@ -3,6 +3,7 @@
 
 from PyP100 import PyP100
 from PyP100 import PyL530
+import time
 
 
 brightness = 50
