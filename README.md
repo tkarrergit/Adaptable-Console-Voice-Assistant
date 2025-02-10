@@ -1,7 +1,7 @@
 # Adaptable Console Voice Assistant
 
 **Status:** 
-Early Development / Beta Features
+Early Development / Beta Features / It's actually out of order!
 
 **Entwicklungszeitraum:** 
 		November, 2023 bis März, 2024
